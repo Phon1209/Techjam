@@ -53,13 +53,28 @@ def distance():
 def handleLegacy(pos):
     x=0
     y=0
-    if isinstance(pos['x'],int):x=pos['x']
-    if isinstance(pos['y'],int):y=pos['y']
-    if isinstance(pos['north'],int):y=pos['north']
-    if isinstance(pos['south'],int):y=-pos['south']
-    if isinstance(pos['east'],int):x=pos['east']
-    if isinstance(pos['west'],int):x=-pos['west']
-    return jsonify(x=x , y=y)
+    cx=0
+    cy=0
+    if isinstance(pos['x'],int):
+        x=pos['x']
+        cx+=1
+    if isinstance(pos['y'],int):
+        y=pos['y']
+        cy+=1
+    if isinstance(pos['north'],int):
+        y=pos['north']
+        cy+=1
+    if isinstance(pos['south'],int):
+        y=-pos['south']
+        cy+=1
+    if isinstance(pos['east'],int):
+        x=pos['east']
+        cx+=1
+    if isinstance(pos['west'],int):
+        x=-pos['west']
+        cx+=1
+    if(cx==1 and cy==1)
+        return jsonify(x=x , y=y)
 
 def calculate_distance(first,second,man):
     first = handleLegacy(first)
