@@ -38,7 +38,7 @@ def distance():
     if "robot#" in second :
         second = _get_position(second)
 
-    if first == None || second == None : 
+    if first == None or second == None : 
         return HTTPStatus.FAILED_DEPENDENCY
     
     
@@ -79,7 +79,7 @@ def _get_value(token):
 @app.route("/robot/<robot_id>/position", methods=['PUT'])
 def put_variable(robot_id):
     body = request.get_json()
-    if robot_id not in range(1..999999):
+    if robot_id not in range(1,999999):
         return HTTPStatus.BAD_REQUEST
     variables[name] = body['position']
     return '', HTTPStatus.NO_CONTENT
@@ -110,7 +110,7 @@ def get_nearest():
     else:
         if not isinstance(body['k'],int):
             return HTTPStatus.BAD_REQUEST
-        else k = body['k']
+        else: k = body['k']
     
     value = []
     reference = body['ref_position']
