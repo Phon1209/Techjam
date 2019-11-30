@@ -19,8 +19,10 @@ func_map = {
 variables = {}
 
 def isPosition(pos):
-    if isinstance(pos['x'], int) and isinstance(pos['y'],int) : return True
-    else : return False
+    isPos = True
+    if not isinstance(pos['x'],int) and not isinstance(pos['east'],int) and not isinstance(pos['west'],int) :  isPos=False
+    if not isinstance(pos['y'],int) and not isinstance(pos['north'],int) and not isinstance(pos['south'],int) :  isPos=False
+    return isPos
 
 
 @app.route("/distance", methods=['POST'])
@@ -48,7 +50,20 @@ def distance():
         result = calculate_distance(first,second,False)
     return jsonify(result=result), HTTPStatus.OK
 
+def handleLegacy(pos):
+    x=0
+    y=0
+    if isinstance(pos['x'],int):x=pos['x']
+    if isinstance(pos['y'],int):y=pos['y']
+    if isinstance(pos['north'],int):y=pos['north']
+    if isinstance(pos['south'],int):y=-pos['south']
+    if isinstance(pos['east'],int):x=pos['east']
+    if isinstance(pos['west'],int):x=-pos['west']
+    return jsonify(x=x , y=y)
+
 def calculate_distance(first,second,man):
+    first = handleLegacy(first)
+    second = handleLegacy(second)
     delta_x = first['x']-second['x']
     delta_y = first['y'] - second['y']
     if man : 
@@ -81,7 +96,7 @@ def put_variable(robot_id):
     body = request.get_json()
     if robot_id not in range(1,999999):
         return HTTPStatus.BAD_REQUEST
-    variables[name] = body['position']
+    variables[name] = handleLegacy(body['position'])
     return '', HTTPStatus.NO_CONTENT
 
 
